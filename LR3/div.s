@@ -49,7 +49,6 @@ jz div_by_zero
 
 cdq
 idiv ecx
-jo div_overflow
 
 ; return
 mov [edi], eax ; move result to the memory address
