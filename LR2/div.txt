@@ -1,0 +1,19 @@
+/* full
+mov eax, a_arg
+mov ebx, b_arg
+mov ecx, c_arg
+
+imul ebx, 2 ; <ebx> = 2*b
+mov edx, 2
+idiv edx ; <eax> = a/2
+imul edx, ecx, 7 ; <edx> = 7*c
+imul ecx, 12 ; <ecx> = 12*c
+
+add ebx, edx ; <ebx> = 2*b + 7*c
+add eax, ecx ; <eax> = a/2 + 12*c
+
+mov ecx, eax
+mov eax, ebx
+
+idiv ecx
+ */
