@@ -81,6 +81,10 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "valarray": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "strstream": "cpp",
+        "cfenv": "cpp",
+        "csetjmp": "cpp",
+        "source_location": "cpp"
     }
 }

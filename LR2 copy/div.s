@@ -1,18 +1,13 @@
-.686P
-.MODEL FLAT, C
-.DATA
+global calcDiv
 
-public calcDiv
-
-.CODE
-calcDiv PROC C a_arg:WORD, b_arg:BYTE, c_arg:WORD, res_arg:PTR WORD
+calcDiv:
 
 ; (a+c) /b
 
-movsx BX, [b_arg]
+movsx BX, [esp + 8]
 
-mov AX, [a_arg]
-mov CX, [c_arg]
+mov AX, [esp + 4]
+mov CX, [esp + 12]
 
 add AX, CX
 cwd
@@ -20,7 +15,7 @@ cwd
 idiv BX
 
 ; save the result
-mov ecx, [res_arg] ;get pointer to memory for return value
+mov ecx, [esp + 16] ;get pointer to memory for return value
 mov [ecx], AX ;move result to the memory address
 
 ; exit function with status code
@@ -50,6 +45,3 @@ jmp func_ret
 func_ret:
 ret
 
-calcDiv ENDP
-
-END

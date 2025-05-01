@@ -2,22 +2,21 @@
 
 extern "C"
 {
-  int calcDiv (short, char, short, short*);
+  int doAsmCalculations(int, int, int*);
 }
 
 int main(int argc, char* argv[])
 {
-    if (argc != 4)
+    if (argc != 3)
     {
         return 1;
     }
 
-    short a = std::stoi(argv[1]);
-    char b = std::stoi(argv[2]);
-    short c = std::stoi(argv[3]);
+    int a = std::stoi(argv[1]);
+    int b = std::stoi(argv[2]);
 
-    short res = 0;
-    int status = calcDiv(a,b,c, &res);
+    int res = 0;
+    int status = doAsmCalculations(a,b, &res);
     switch (status)
     {
       case 0:
@@ -42,14 +41,32 @@ int main(int argc, char* argv[])
         std::cout << "status: DIV BY ZERO" << std::endl;
         break;
 
+      case 6:
+        std::cout << "b >= 4, undefined behavior" << std::endl;
+
       default:
         break;
     }
 
     std::cout << "expected: ";
     std::flush(std::cout);
-    
-    std::cout << (a+c) /b; 
+
+    if (a == b)
+    {
+      std::cout << -15 * b << std::endl;
+    }
+    else if (a < b)
+    {
+      std::cout << (a*b - 20) / b << std::endl;
+    }
+    else if (a > b && b < 4)
+    {
+      std::cout << b*b + 5 << std::endl;
+    }
+    else
+    {
+      std::cout << "undefined behavior" << std::endl;
+    }
 
     return 0;
 }  
