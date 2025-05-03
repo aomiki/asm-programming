@@ -86,5 +86,6 @@
         "cfenv": "cpp",
         "csetjmp": "cpp",
         "source_location": "cpp"
-    }
+    },
+    "cortex-debug.variableUseNaturalFormat": true
 }
