@@ -30,13 +30,28 @@ doAsmCalculations:
 	fld DWORD [b_arg]
 	fmulp
 
+	; check overflow
+	fstsw ax
+	sahf
+	jo mul_overflow
+
 	; 7c
 	fld DWORD [const_seven]
 	fld DWORD [c_arg]
 	fmulp
 
+	; check overflow
+	fstsw ax
+	sahf
+	jo mul_overflow
+
 	; 2b + 7c
 	faddp
+
+	; check overflow
+	fstsw ax
+	sahf
+	jo add_overflow
 
 	; a/2
 	fld DWORD [a_arg]
@@ -48,13 +63,28 @@ doAsmCalculations:
 	fld DWORD [c_arg]
 	fmulp
 
+	; check overflow
+	fstsw ax
+	sahf
+	jo mul_overflow
+
 	; a/2 - 12c
 	fsubp
+
+	fldz
+	fcomip st1
+	je div_by_zero
 
 	; [edi] = (2*b +7c)/(а/2 - 12c);
 	fdivp
 
 	fst DWORD [edi] ; res
+
+	; check overflow
+	fstsw ax
+	sahf
+	jo sub_overflow
+
 	mov eax, 0 ; status
 	jmp func_ret
 
