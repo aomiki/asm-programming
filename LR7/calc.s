@@ -4,6 +4,8 @@
 section .data
 
 const_two dq 2.0
+;bits 8,9
+fpu_cw_placeholder dw 0
 
 section .text
 
@@ -54,11 +56,12 @@ doAsmCalculations:
 	; st1 = tan( (pi / 2.0) + (x * 2.0) )
 	; st2 = log_2(e)
 
-	fdivrp
-	; st0 = cot( (pi / 2.0) + (x * 2.0) )
-	; st1 = log_2(e)
-		
-	fld1
+	; check if outside fptan range +-2^63
+	fstsw ax
+	sahf
+	jp fptan_overflow; C2=PF=1
+
+	fdivr st1, st0
 	; st0 = 1
 	; st1 = cot( (pi / 2.0) + (x * 2.0) )
 	; st2 = log_2(e)
@@ -72,19 +75,28 @@ doAsmCalculations:
 	; = ln( cot( (pi / 2.0) + (x * 2.0) ) )
 
 	fptan
+	; st0 = 1
+	; st1 = tan( ln( cot( (pi / 2.0) + (x * 2.0) ) ) )
+
+	; check if outside fptan range +-2^63
+	fstsw ax
+	sahf
+	jp fptan_overflow; C2=PF=1
+
 	fstp st0
-	; st0 = tan( ln( cot( (pi / 2.0) + (x * 2.0) ) ) )
+	fld st0
+	; st0 = st1 = tan( ln( cot( (pi / 2.0) + (x * 2.0) ) ) )
 
 	fmul st0, st0
-	fmul st0, st0
+	fmulp
 	; st0 = tan^3( ln( cot( (pi / 2.0) + (x * 2.0) ) ) )
 
 	fstp QWORD [edi] ; store to res
 	mov eax, 0
 	jmp func_ret
 
-	add_overflow:
-		mov eax, 1 ; ADD OVERFLOW status code
+	fptan_overflow:
+		mov eax, 1 ; FPTAN OVERFLOW status code
 		jmp func_ret
 
 	sub_overflow:
