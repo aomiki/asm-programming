@@ -17,10 +17,10 @@ void output_result(double x, int status, double res)
 			std::cout << "status: FPTAN OVERFLOW" << std::endl;
 			break;
 		case 2:
-			std::cout << "status: SUB OVERFLOW" << std::endl;
+			std::cout << "status: LOG ARG ZERO" << std::endl;
 			break;
 		case 3:
-			std::cout << "status: DIV OVERFLOW" << std::endl;
+			std::cout << "status: LOG ARG NEG" << std::endl;
 			break;
 		case 4:
 			std::cout << "status: MUL OVERFLOW" << std::endl;
@@ -40,7 +40,7 @@ void output_result(double x, int status, double res)
 	std::cout << "expected: ";
 	std::flush(std::cout);
 
-	std::cout << std::pow(std::tan(std::log(std::cos(2.0*x+M_PI/2.0)/std::sin(2.0*x+M_PI/2.0))), 3) << std::endl;
+	std::cout << std::pow(std::tan(std::log(1/std::tan(2.0*x+M_PIf64x/2))), 3) << std::endl;
 }
 
 void parse_input(int argc, char* argv[], double* x_out)

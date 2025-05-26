@@ -4,8 +4,6 @@
 section .data
 
 const_two dq 2.0
-;bits 8,9
-fpu_cw_placeholder dw 0
 
 section .text
 
@@ -70,6 +68,15 @@ doAsmCalculations:
 	; st0 = cot( (pi / 2.0) + (x * 2.0) )
 	; st1 = log_2(e)^-1
 
+	; check if log argument is negative or zero
+	fldz
+	; st0 = 0
+	; st1 = cot( (pi / 2.0) + (x * 2.0) )
+	; st2 = log_2(e)^-1
+	fcomip st0, st1 ; 0 ? log_arg
+	je log_arg_zero ; 0 = log_arg
+	ja log_arg_neg ; 0 > log_arg
+
 	fyl2x
 	; st0 = log_2(e)^-1 * log_2( cot( (pi / 2.0) + (x * 2.0) ) ) =
 	; = ln( cot( (pi / 2.0) + (x * 2.0) ) )
@@ -99,12 +106,12 @@ doAsmCalculations:
 		mov eax, 1 ; FPTAN OVERFLOW status code
 		jmp func_ret
 
-	sub_overflow:
-		mov eax, 2 ; SUB OVERFLOW status code
+	log_arg_zero:
+		mov eax, 2 ; LOG ARG ZERO status code
 		jmp func_ret
 
-	div_overflow:
-		mov eax, 3 ; DIV OVERFLOW status code
+	log_arg_neg:
+		mov eax, 3 ; LOG ARG NEG status code
 		jmp func_ret
 
 	mul_overflow:

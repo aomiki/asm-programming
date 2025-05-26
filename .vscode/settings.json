@@ -85,7 +85,9 @@
         "strstream": "cpp",
         "cfenv": "cpp",
         "csetjmp": "cpp",
-        "source_location": "cpp"
+        "source_location": "cpp",
+        "queue": "cpp",
+        "stack": "cpp"
     },
     "cortex-debug.variableUseNaturalFormat": true
 }
